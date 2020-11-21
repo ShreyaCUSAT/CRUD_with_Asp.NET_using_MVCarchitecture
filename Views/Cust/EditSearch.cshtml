@@ -1,0 +1,133 @@
+﻿@model IEnumerable<DataAccess.Customer>
+@using DataAccess;
+@{
+    ViewBag.Title = "EditSearch";
+    Layout = "";
+}
+<head>
+    <title></title>
+    <style type="text/css">
+        .gridCSS, .gridCSS th, .gridCSS td {
+            border-collapse: collapse;
+            border: 3px solid black;
+            height: 30px;
+        }
+    </style>
+</head>
+<div style="font-family: Arial;">
+    <h1 style="text-align: center; text-decoration: underline; color: midnightblue;">Customer Form</h1>
+    @using (Html.BeginForm("AddCustomer", "Cust", FormMethod.Post))
+    {
+        <div style="margin: 20px 0px 15px 80px">
+            @Html.TextBox("fullname", null, new { placeholder = "Full Name", Style = "height: 40px; border: 2px solid; outline: 1px solid; width:300px;" })
+
+            @Html.TextBox("Company", null, new { placeholder = "Company", Style = "height: 40px; border: 2px solid; outline: 1px solid; width:300px; margin-left:30px;" })
+            <br /><br />
+        </div>
+        <div style="margin: 20px 0px 15px 80px">
+            @Html.TextBox("Email", null, new { placeholder = "Email", Style = "height: 40px; border: 2px solid; outline: 1px solid; width:300px;" })
+            @Html.DropDownList("Country", new List<SelectListItem> { new SelectListItem { Text = "Country", Value = "0" }, new SelectListItem { Text = "Contry", Value = "0" }, new SelectListItem { Text = "India", Value = "India" }, new SelectListItem { Text = "USA", Value = "USA" }, new SelectListItem { Text = "UK", Value = "UK" }, new SelectListItem { Text = "Autralia", Value = "Australia" }, new SelectListItem { Text = "Canada", Value = "Canada" } }, new { Style = "height: 40px; border: 2px solid; outline: 1px solid; width:300px; margin-left:30px;" })
+
+
+            <br /><br />
+            <button id="add" type="submit" formmethod="post" style="margin-left: 0px; height: 30px; border-color:#FF9900; color:#FF9900;">Add Customer</button>
+        </div>
+    }
+    @using (Html.BeginForm("Search", "Cust", FormMethod.Post))
+    {
+        <div style="margin: 20px 0px 15px 80px">
+            @Html.TextBox("search", null, new { placeholder = "Type here to search", Style = "height: 30px; border: 2px solid; outline: 1px solid; width:300px;" })
+            <button id="srch" type="submit" formmethod="post" style="margin-left: 0px; height: 30px; border-color:#FF9900; color:#FF9900;">Search</button>
+        </div>
+    }
+    <br />
+    <div id="tbl" style="margin: 0px 80px 0px 80px;">
+        <table border="1" id="data" class="gridCSS" style="border-style: solid; border-color: inherit; border-width: 1px; margin: auto; outline: 1px solid; text-align: center;" width="100%">
+            <tr>
+                <th><b>Full Name</b></th>
+                <th><b>Company</b></th>
+                <th><b>Country</b></th>
+                <th><b>Email</b></th>
+                <th><b>Actions</b></th>
+            </tr>
+            @foreach (var item in Model)
+            {
+                if (item.rollno == Convert.ToInt32(ViewBag.roll))
+                {
+                    using (Html.BeginForm("UpdateSearch", "Cust", FormMethod.Post))
+                    {
+                        <tr>
+
+                            @Html.Hidden("id", item.rollno)
+
+
+                            <td>
+                                @Html.TextBox("full_name", item.Full_Name)
+                            </td>
+
+
+                            <td>
+                                @Html.TextBox("company", item.Company)
+                            </td>
+
+
+                            <td>
+                                @Html.DropDownList("Country", new List<SelectListItem> { new SelectListItem { Text = "Country", Value = "0" }, new SelectListItem { Text = "Contry", Value = "0" }, new SelectListItem { Text = "India", Value = "India" }, new SelectListItem { Text = "USA", Value = "USA" }, new SelectListItem { Text = "UK", Value = "UK" }, new SelectListItem { Text = "Autralia", Value = "Australia" }, new SelectListItem { Text = "Canada", Value = "Canada" } })
+                            </td>
+
+
+                            <td>
+                                @Html.TextBox("email", item.Email)
+                            </td>
+                            <td>
+                                <button id="update" type="submit" formmethod="post">Update</button>
+                                @Html.ActionLink("Cancel", "SearchCancel")
+                            </td>
+                        </tr>
+
+                    }
+                }
+                else
+                {
+
+
+                    <tr>
+                        <td style="color:#000099;">
+                            @Html.DisplayFor(modelItem => item.Full_Name)
+                        </td>
+                        <td style="color:#000099;">
+                            @Html.DisplayFor(modelItem => item.Company)
+                        </td>
+                        <td style="color:#000099;">
+                            @Html.DisplayFor(modelItem => item.Country)
+                        </td>
+                        <td style="color:#000099;">
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "EditSearch", new { id = item.rollno })
+                            @Html.ActionLink("Delete", "DeleteSearch", new { id = item.rollno })
+                        </td>
+                    </tr>
+
+                }
+            }
+            @if (Model.Count() < 6)
+            {
+                for (var i = 0; i < (6 - Model.Count()); i++)
+                {
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                }
+            }
+
+        </table>
+
+    </div>
+    </div>
+
